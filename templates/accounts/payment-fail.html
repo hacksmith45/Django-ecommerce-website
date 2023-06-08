@@ -1,0 +1,21 @@
+{% extends 'base/base.html' %}
+
+
+{% block start %}
+ 
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(event) {
+      Swal.fire({
+        icon: "error",
+        title: "Payment Failed",
+        text: "Sorry, your payment could not be processed.",
+      }).then(function() {
+        // Redirect to cart page
+        window.location.href = "{% url 'cart' %}";
+      });
+    });
+  </script>
+
+{% endblock %}

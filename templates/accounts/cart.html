@@ -1,0 +1,129 @@
+{% extends 'base/base.html' %}
+
+{% block start %}
+<section class="section-content padding-y">
+    <div class="container">
+        <div class="row">
+            <main class="col-md-9">
+                <div class="card">
+                    <table class="table table-borderless table-shopping-cart">
+                        <thead class="text-muted">
+                            <tr class="small text-uppercase">
+                                <th scope="col">Product</th>
+                                <th scope="col" width="120">Quantity</th>
+                                <th scope="col" width="120">Price</th>
+                                <th scope="col" class="text-right" width="200"> </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for cart_item in cart.cart_items.all %}
+                                <tr>
+                                    <td>
+                                        <figure class="itemside">
+                                            <div class="aside">
+                                                <img src="/media/{{cart_item.product.product_images.first.image }}" class="img-sm">
+                                            </div>
+                                           
+                                            <figcaption class="info">
+                                                <a href="#" class="title text-dark">{{cart_item.product.product_name}}</a>
+                                                {% if cart_item.size_variant %}
+                                                <p class="text-muted small">Size: {{cart_item.size_variant}}</p>
+                                                {% endif %}
+                                            </figcaption>
+                                        </figure>
+                                    </td>
+                                    <td> 
+                                        <p>{{cart_item.quantity}}</p>
+                                    </td>
+                                    <td> 
+                                        <div class="price-wrap"> 
+                                            <var class="price">${{cart_item.get_product_price}}</var> 
+                                        </div> <!-- price-wrap .// -->
+                                    </td>
+                                    <td class="text-right"> 
+                                        <a data-original-title="Save to Wishlist" title="" href="" class="btn btn-light" data-toggle="tooltip"> <i class="fa fa-heart"></i></a> 
+                                        <a href="{% url 'remove_cart' cart_item.uid %}" class="remove-btn btn btn-light" > Remove</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                
+                    <div class="card-body border-top">
+                        <a href="{% url 'index' %}" class="btn btn-light"> <i class="fa fa-chevron-left"></i> Continue shopping </a>
+                    </div>	
+                 
+                </div> <!-- card.// -->
+
+                <div class="alert alert-success mt-3">
+                    <p class="icontext"><i class="icon text-success fa fa-truck"></i> Free Delivery within 1-2 weeks</p>
+                </div>
+            </main> <!-- col.// -->
+            <aside class="col-md-3">
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <form method="POST">
+                            {% csrf_token %}
+                            {% include 'base/alert.html' %}
+                            <div class="form-group">
+                                <label>Have a coupon?</label>
+                                <div class="input-group">
+                                    <input type="text" name="coupon" class="form-control"  placeholder="Coupon code">
+                                    <span class="input-group-append"> 
+                                        <button type="submit" class="btn btn-primary">Apply</button>
+                                    </span>
+                                </div>
+                            </div>
+                            {% if cart.coupon %}
+                            <a href="{% url 'remove_coupon' cart.uid %}" class="btn btn-success">{{ cart.coupon.coupon_code }}</a>
+                            {% endif %}
+                        </form>
+                    </div> <!-- card-body.// -->
+                </div>  <!-- card .// -->
+                <div class="card">
+                    <div class="card-body">
+                        <dl class="dlist-align">
+                            <dt>Total price:</dt>
+                            <dd class="text-right">USD {{cart.get_cart_total}}</dd>
+                        </dl>
+                       
+                        <dl class="dlist-align">
+                            <dt>Total:</dt>
+                            <dd class="text-right  h5"><strong>${{cart.get_cart_total}}</strong></dd>
+                        </dl>
+                        <hr>
+                        <p class="text-center mb-3">
+                            <a style="color:white;" href="{% url 'checkout' %}"><button style="width:200px" class="btn btn-dark">Checkout</button></a>
+                    
+                        </p>
+                    </div> <!-- card-body.// -->
+                </div>  <!-- card .// -->
+            </aside> <!-- col.// -->
+        </div>
+    </div> <!-- container .//  -->
+</section>
+
+<script>
+
+    $(document).ready(function() {
+        
+        $('.remove-btn').click(function(e) {
+          e.preventDefault(); // Prevent the default button behavior
+          
+          // Show SweetAlert message
+          Swal.fire({
+            title: "Product removed from Cart",
+            text: "Product removed from cart successfully",
+            icon: "success",
+            showConfirmButton: false,
+            timer: 2000
+          }).then(() => {
+        
+            window.location.href = $(this).attr('href');
+          });
+        });
+      });
+      
+</script>
+{% endblock %}
+

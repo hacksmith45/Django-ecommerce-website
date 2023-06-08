@@ -1,0 +1,60 @@
+
+
+
+{% extends 'base/base.html' %}
+
+{% block start %}
+
+<style>
+      .price {
+        font-family: 'Roboto', sans-serif;
+    }
+</style>
+
+<div id="product-page" class="container mt-5 pt-5">
+    <div class="row">
+        {% for product in products %}
+        <div class="col-md-3">
+            <figure class="card card-product-grid">
+                <div class="img-wrap"> <img src="/media/{{product.product_images.first.image}}"> </div>
+                <figcaption class="info-wrap border-top">
+                    <a href="{% url 'get_product' product.slug %}" class="title"><b>{{product.product_name}}</b></a>
+                    <div class="price mt-2">${{product.price}}.00</div> <!-- price-wrap.// -->
+                </figcaption>
+            </figure> <!-- card // -->
+        </div> <!-- col.// -->
+
+        {% endfor %}
+
+    </div>
+     
+    <!--Pagination-->
+    <nav aria-label="Page navigation example" class="d-flex justify-content-center">
+        <ul class="pagination">
+          {% if products.has_previous %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{products.previous_page_number}}">Previous</a>
+          </li>
+          {% endif %}
+          <li class="page-item active">
+            <a class="page-link" href="#">{{products.number}}</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="#">of</a>
+          </li>
+          <li class="page-item">
+            <a class="page-link" href="?page={{products.paginator.num_pages}}">{{products.paginator.num_pages}}</a>
+          </li>
+
+          {% if products.has_next %}
+          <li class="page-item">
+            <a class="page-link" href="?page={{products.next_page_number}}">Next</a>
+          </li>
+          {% endif %}
+        </ul>
+      </nav>
+       <!--Pagination-->
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends 'base/base.html' %}
+
+{% block start %}
+<style>
+    .content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+
+<div class="container mt-5 pt-5">
+    <div class="row">
+
+        {% for product in products %}
+        <div class="col-md-3">
+            <figure class="card card-product-grid">
+                <div class="img-wrap"> <img src="/media/{{product.product_images.first.image}}"> </div>
+                <figcaption class="info-wrap border-top">
+                    <a href="{% url 'get_product' product.slug %}" class="title"><b>{{product.product_name}}</b></a>
+                    <div class="price mt-2">${{product.price}}.00</div> <!-- price-wrap.// -->
+                </figcaption>
+            </figure> <!-- card // -->
+        </div> <!-- col.// -->
+        {% empty %}
+        <div class="content text-center mx-auto">
+            <img class="img-fluid" style="width:400px; height:400px;" src="/media/images/404-error.jpg" alt="No results image">
+            <p>No results found for the given query...</p>
+        
+        </div>
+        {% endfor %}
+
+    </div>
+
+    </div>
+
+
+    <script>
+        // Function to display SweetAlert when there are no search results
+        function showNoResultsAlert() {
+            Swal.fire({
+                title: "No Results",
+                text: "No results for the given query...",
+                icon: "info",
+                showConfirmButton: false,
+                timer: 2000  // Display the alert for 2 seconds
+            });
+        }
+    
+        // Check if there are no search results and show alert if true
+        const noResultsContent = document.querySelector(".content");
+        if (noResultsContent) {
+            showNoResultsAlert();
+        }
+    </script>
+
+{% endblock %}

@@ -1,0 +1,39 @@
+{% extends 'base/base.html' %}
+
+
+{% block start %}
+<style>
+    .content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+</style>
+
+
+<div class="content text-center mx-auto">
+    <img class="img-fluid" style="width:400px; height:400px;" src="/media/images/empty-cart.avif" alt="empty cart">
+    <p>Cart is empty...</p>
+</div>
+
+<script>
+    // Function to display SweetAlert when there are no search results
+    function showNoResultsAlert() {
+        Swal.fire({
+            title: "No Items",
+            text: "Your Cart is empty ...",
+            icon: "info",
+            showConfirmButton: false,
+            timer: 2000  // Display the alert for 2 seconds
+        });
+    }
+
+    // Check if there are no search results and show alert if true
+    const noResultsContent = document.querySelector(".content");
+    if (noResultsContent) {
+        showNoResultsAlert();
+    }
+</script>
+
+{% endblock %}
+
